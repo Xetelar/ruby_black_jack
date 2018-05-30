@@ -4,6 +4,7 @@ class Player
   end
 
   attr_accessor :cards, :name
+  attr_reader :money
 
   def initialize(name, money = 100)
     @name = name

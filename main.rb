@@ -59,6 +59,7 @@ class Main
         1  - Добавить карту
         2  - Пропустить ход
         3  - Открыть карты
+        4  - Проверить текущее кол-во денег
         0  - Новая игра
       ====================================='
     action = gets.to_i
@@ -73,6 +74,8 @@ class Main
       miss_movie('dealer')
     when 3
       open_cards
+    when 4
+      current_money
     else
       puts 'Введите число от 0 до 3'
       player_movie
@@ -113,6 +116,12 @@ class Main
     @dealer.cards = []
     @bank = 0
     start_game
+  end
+
+  def current_money
+    puts "======= У Вас #{@player.money}$ ======="
+    puts "======= У диллера #{@dealer.money}$ ======="
+    player_movie
   end
 end
 
