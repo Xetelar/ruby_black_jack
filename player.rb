@@ -1,29 +1,10 @@
 class Player
-  def self.sum_cards(player)
-    player.cards.sum { |card| card[:number] }
-  end
-
-  attr_accessor :cards, :name
-  attr_reader :money
+  attr_accessor :name, :money, :hand
 
   def initialize(name, money = 100)
     @name = name
     @money = money
-    @cards = []
-  end
-
-  def add_card(card)
-    @cards << card
-    card[:value]
-  end
-
-  def puts_card
-    puts 'Ваши карты'
-    cards.each { |card| puts card[:value] }
-  end
-
-  def remove_money(value = 10)
-    @money -= value
+    @hand = Hand.new
   end
 
   def add_money(value)
@@ -32,5 +13,21 @@ class Player
 
   def money_zero?
     @money <= 0
+  end
+
+  def sum_cards
+    sum = 0
+    @hand.cards.each do |card|
+      if card.pointer != 'A'
+        sum += card.value
+      else
+        sum = sum + 11 > 21 ? 1 : 11
+      end
+    end
+    sum
+  end
+
+  def show_sum_card
+    puts "Количество очков #{@name}: #{sum_cards}"
   end
 end
