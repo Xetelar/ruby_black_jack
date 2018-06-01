@@ -17,7 +17,7 @@ class Game
       name = @interface.gets_name
       @user = User.new(name)
       @dealer = Dealer.new
-      @user.show_name
+      @interface.show_name(@user)
       start_game
     end
   end
@@ -25,7 +25,11 @@ class Game
   private
 
   def movie
-    action = @current_player.movie
+    action = if @current_player == @user
+               @interface.choose_movie
+             else
+               @current_player.movie
+             end
     return open_cards if @user.hand.size == 3
     case action
     when 1
@@ -39,7 +43,7 @@ class Game
     when 5
       return
     else
-      puts 'Введите число от 1 до 4'
+      @interface.movie_error
       movie
     end
   end
@@ -49,8 +53,7 @@ class Game
       @user.hand.add(@block.add_card)
       @dealer.hand.add(@block.add_card)
     end
-    puts 'Ваши карты'
-    @user.hand.show
+    @interface.show_player_cards(@user)
     @bank = 20
     @current_player = @user
     movie
@@ -59,24 +62,22 @@ class Game
   def open_cards
     sum_cards_player = @user.sum_cards
     sum_cards_dealer = @dealer.sum_cards
-    @user.show_sum_card
-    @dealer.show_sum_card
+    @interface.show_sum_card(@user)
+    @interface.show_sum_card(@dealer)
 
     if sum_cards_player > INTEGER || sum_cards_player < sum_cards_dealer
-      puts '======= Вы проиграли ======='
+      @interface.show_finish_text('vin')
       @dealer.add_money(@bank)
     elsif sum_cards_dealer > INTEGER || sum_cards_dealer < sum_cards_player
-      puts '======= Вы выйграли ======='
+      @interface.show_finish_text('loss')
       @user.add_money(@bank)
     else
-      puts '======= Ничья ======='
+      @interface.show_finish_text
       @user.add_money(@bank / 2)
       @dealer.add_money(@bank / 2)
     end
 
-    if @user.money_zero? || @dealer.money_zero?
-      return start
-    end
+    return start if @user.money_zero? || @dealer.money_zero?
 
     @user.hand = Hand.new
     @dealer.hand = Hand.new
@@ -84,21 +85,20 @@ class Game
   end
 
   def current_money
-    puts "======= У Вас #{@user.money}$ ======="
-    puts "======= У диллера #{@dealer.money}$ ======="
+    @interface.show_player_money(@user)
+    @interface.show_player_money(@dealer)
     movie
   end
 
   def skip_turn
-    puts "#{@current_player} пропустил ход"
+    @interface.show_skip_turn(@current_player)
     change_player
     movie
   end
 
   def take_card
     @current_player.hand.add(@block.add_card)
-    @current_player.hand.show
-    puts "#{@current_player} взял карту"
+    @interface.show_take_card(@current_player)
     change_player
     movie
   end

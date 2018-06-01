@@ -3,8 +3,7 @@ class Dealer < Player
     super('Диллер')
   end
 
-  def movie
-    puts @hand.cards.class
+  def movie(a)
     sum_cards > 17 || @hand.size == 3 ? 2 : 1
   end
 end

@@ -10,10 +10,6 @@ class Hand
     card.value
   end
 
-  def show
-    @cards.each { |card| puts "card: #{card.suit} - #{card.value} очков" }
-  end
-
   def size
     @cards.length
   end

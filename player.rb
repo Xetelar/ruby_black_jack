@@ -26,8 +26,4 @@ class Player
     end
     sum
   end
-
-  def show_sum_card
-    puts "Количество очков #{@name}: #{sum_cards}"
-  end
 end
