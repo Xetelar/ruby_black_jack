@@ -6,7 +6,6 @@ class Game
   def initialize
     @interface = Interface.new
     @bank = 0
-    @block = Deck.new
   end
 
   def start
@@ -18,6 +17,7 @@ class Game
       @user = User.new(name)
       @dealer = Dealer.new
       @interface.show_name(@user)
+      @block = Deck.new
       start_game
     end
   end
@@ -66,10 +66,10 @@ class Game
     @interface.show_sum_card(@dealer)
 
     if sum_cards_player > INTEGER || sum_cards_player < sum_cards_dealer
-      @interface.show_finish_text('vin')
+      @interface.show_finish_text('loss')
       @dealer.add_money(@bank)
     elsif sum_cards_dealer > INTEGER || sum_cards_dealer < sum_cards_player
-      @interface.show_finish_text('loss')
+      @interface.show_finish_text('vin')
       @user.add_money(@bank)
     else
       @interface.show_finish_text
