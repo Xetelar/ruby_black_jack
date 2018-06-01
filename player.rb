@@ -11,6 +11,10 @@ class Player
     @money += value
   end
 
+  def remove_money(value)
+    @money -= value
+  end
+
   def money_zero?
     @money <= 0
   end
@@ -18,11 +22,11 @@ class Player
   def sum_cards
     sum = 0
     @hand.cards.each do |card|
-      if card.pointer != 'A'
-        sum += card.value
-      else
-        sum = sum + 11 > 21 ? 1 : 11
-      end
+      sum += if card.pointer != 'A'
+               card.value
+             else
+               sum + 11 > 21 ? 1 : 11
+             end
     end
     sum
   end

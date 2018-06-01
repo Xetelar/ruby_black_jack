@@ -1,7 +1,8 @@
 class Game
-  attr_accessor :current_player
+  attr_accessor :current_player, :bank
 
   INTEGER = 21
+  RATE = 10
 
   def initialize
     @interface = Interface.new
@@ -17,7 +18,7 @@ class Game
       @user = User.new(name)
       @dealer = Dealer.new
       @interface.show_name(@user)
-      @block = Deck.new
+      sleep(1)
       start_game
     end
   end
@@ -49,12 +50,15 @@ class Game
   end
 
   def start_game
+    @block = Deck.new
     2.times do
       @user.hand.add(@block.add_card)
       @dealer.hand.add(@block.add_card)
     end
     @interface.show_player_cards(@user)
-    @bank = 20
+    @bank = RATE * 2
+    @user.remove_money(RATE)
+    @dealer.remove_money(RATE)
     @current_player = @user
     movie
   end
@@ -65,7 +69,7 @@ class Game
     @interface.show_sum_card(@user)
     @interface.show_sum_card(@dealer)
 
-    if sum_cards_player > INTEGER || sum_cards_player < sum_cards_dealer
+    if sum_cards_player > INTEGER || (sum_cards_player < sum_cards_dealer && sum_cards_dealer < INTEGER)
       @interface.show_finish_text('loss')
       @dealer.add_money(@bank)
     elsif sum_cards_dealer > INTEGER || sum_cards_dealer < sum_cards_player
@@ -77,22 +81,25 @@ class Game
       @dealer.add_money(@bank / 2)
     end
 
-    return start if @user.money_zero? || @dealer.money_zero?
+    return if @user.money_zero? || @dealer.money_zero?
 
     @user.hand = Hand.new
     @dealer.hand = Hand.new
+    sleep(1)
     start_game
   end
 
   def current_money
     @interface.show_player_money(@user)
     @interface.show_player_money(@dealer)
+    sleep(1)
     movie
   end
 
   def skip_turn
     @interface.show_skip_turn(@current_player)
     change_player
+    sleep(1)
     movie
   end
 
@@ -100,6 +107,7 @@ class Game
     @current_player.hand.add(@block.add_card)
     @interface.show_take_card(@current_player)
     change_player
+    sleep(1)
     movie
   end
 

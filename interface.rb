@@ -53,7 +53,7 @@ class Interface
   end
 
   def show_skip_turn(player)
-    puts "#{player} пропустил ход"
+    puts "#{player.name} пропустил ход"
   end
 
   def show_player_money(player)
