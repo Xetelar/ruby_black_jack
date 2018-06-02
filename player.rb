@@ -21,12 +21,17 @@ class Player
 
   def sum_cards
     sum = 0
+    cards_a = []
     @hand.cards.each do |card|
-      sum += if card.pointer != 'A'
-               card.value
-             else
-               sum + 11 > 21 ? 1 : 11
-             end
+      if card.pointer != 'A'
+        sum += card.value
+      else
+        cards_a << card
+      end
+    end
+    cards_a.each do
+      puts sum + 11 > 21
+      sum += sum + 11 > 21 ? 1 : 11
     end
     sum
   end

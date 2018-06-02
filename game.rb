@@ -106,6 +106,7 @@ class Game
   def take_card
     @current_player.hand.add(@block.add_card)
     @interface.show_take_card(@current_player)
+    @interface.show_player_cards(@current_player) if @current_player == @user
     change_player
     sleep(1)
     movie
